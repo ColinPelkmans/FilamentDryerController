@@ -1,0 +1,20 @@
+Component,Quantity,Function
+Arduino Uno,1,Main controller
+Velleman LABPS3005D,1,"Bench power supply (0-30V, 5A)"
+Breadboard,1,Prototyping circuit connections
+Jumper Wires,30,Circuit connections
+5V Relay Module (SRD-05VDC-SL-C),1,Legacy heater switching (optional)
+IRFZ44N MOSFET,2,Logic-level switching for fan/heatbed
+Heated Bed MOSFET Module,1,Power switching for heatbed
+DS18B20 Temperature Sensor (Waterproof),1,Chamber temperature sensing
+KY-028 Thermistor Module,1,Heatbed temperature sensing
+DRV8825 Stepper Driver,1,Control filament spool motor
+NEMA 17 Stepper Motor,1,Rotates filament spool
+PWM DC Fan,1,Air circulation
+TFT Display (ST7789 SPI),1,Displays UI info
+EC11 Rotary Encoder w/ Button,1,User input control
+LM2596 Buck Converter,1,Step-down 12/24V to 5V for Arduino
+Auto Blade Fuse (5A),2,Overcurrent protection
+"Blade Fuse Holder (16AWG, Waterproof)",2,Houses auto blade fuses
+"Thermal Fuse (100°C TF/RY, 10A 250V)",1,Heat protection (failsafe)
+12V or 24V Heated Bed,1,Drying chamber heat source

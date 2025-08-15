@@ -15,7 +15,15 @@ This Arduino-based controller converts your retired 3D printer into a smart fila
 - **Dual temperature monitoring** (chamber + bed sensors)
 - **Smart fan control** for optimal air circulation
 
+## ⚠️ Safety First
+
+**IMPORTANT**: This project involves high temperatures (up to 80°C) and electrical power. Please read the complete safety documentation before building:
+
+📖 **[SAFETY DOCUMENTATION](docs/SAFETY.md)** - **MUST READ BEFORE BUILDING**
+
 ## 🔧 Hardware Requirements
+
+See the complete **[Bill of Materials (BOM_FilamentDryer.csv)](BOM_FilamentDryer.csv)** for exact part numbers and specifications.
 
 ### From Your Old Ender 3:
 - Heated bed + MOSFET driver
@@ -31,6 +39,17 @@ This Arduino-based controller converts your retired 3D printer into a smart fila
 - DS18B20 temperature sensor
 - KY-028 temperature sensor
 - Various MOSFETs for control
+- **Safety Components**: Thermal fuse, overcurrent protection
+
+**💰 Estimated Cost**: $90-135 (excluding reused Ender 3 parts)
+**🔧 Skill Level**: Intermediate to Advanced
+**⏱️ Assembly Time**: 9-15 hours
+
+### 📚 Detailed Documentation
+
+- **[Hardware Specifications](docs/HARDWARE.md)** - Complete component details and specifications
+- **[Wiring Guide](docs/WIRING.md)** - Pin mapping and circuit connections
+- **[Safety Procedures](docs/SAFETY.md)** - Critical safety information and procedures
 
 ## 🚀 Features
 
@@ -49,10 +68,13 @@ This Arduino-based controller converts your retired 3D printer into a smart fila
 - Visual status indicators
 
 ### Safety Features
-- Temperature overshoot protection
-- Automatic shutdown on completion
-- Real-time sensor monitoring
-- Emergency stop capability
+- **Thermal fuse protection** (100°C failsafe)
+- **Overcurrent protection** with auto blade fuses
+- **Dual temperature monitoring** with sensor fault detection
+- **Emergency shutdown** capability
+- **Temperature overshoot protection**
+- **Automatic shutdown on completion**
+- **Real-time sensor monitoring**
 
 ## 📱 User Interface
 
@@ -64,15 +86,19 @@ The controller features a beautiful blue-themed interface with:
 
 ## 🛠️ Installation
 
-1. **Hardware Setup**: Connect components according to pin definitions in `globals.h`
-2. **Library Installation**: Install required Arduino libraries:
+⚠️ **SAFETY WARNING**: Read [SAFETY.md](docs/SAFETY.md) completely before starting installation.
+
+1. **Hardware Setup**: Connect components according to pin definitions in `globals.h` and [Wiring Guide](docs/WIRING.md)
+2. **Safety Systems**: Install thermal fuse and overcurrent protection as detailed in [Safety Documentation](docs/SAFETY.md)
+3. **Library Installation**: Install required Arduino libraries:
    - Adafruit GFX Library
    - Adafruit ST7735 and ST7789 Library
    - OneWire
    - DallasTemperature
    - Adafruit BusIO
-3. **Upload Code**: Flash the `FilamentDryerController.ino` to your Arduino
-4. **Configuration**: Adjust presets in `presets.cpp` if needed
+4. **Upload Code**: Flash the `FilamentDryerController.ino` to your Arduino
+5. **Testing**: Follow safety testing procedures in [SAFETY.md](docs/SAFETY.md)
+6. **Configuration**: Adjust presets in `presets.cpp` if needed
 
 ## 🎨 Customization
 
@@ -85,16 +111,22 @@ The controller features a beautiful blue-themed interface with:
 
 ```cpp
 #define TFT_CS        10    // Display chip select
-#define TFT_RST       9     // Display reset
+#define TFT_RST       9     // Display reset  
 #define TFT_DC        A1    // Display data/command
+#define TFT_BLK       5     // Display backlight (PWM)
 #define ENCODER_A     A2    // Rotary encoder A
 #define ENCODER_B     A3    // Rotary encoder B
 #define ENCODER_BTN   A4    // Encoder button
 #define MOSFET_BED_PWM 8    // Heated bed control
 #define MOSFET_FAN_PWM 6    // Fan speed control
+#define DRV_STEP      2     // Stepper motor step
+#define DRV_DIR       12    // Stepper motor direction
+#define DRV_EN        4     // Stepper motor enable
 #define DS18B20_PIN   7     // Chamber temperature
 #define KY028_AO      A0    // Bed temperature sensor
 ```
+
+**📖 Complete wiring details**: See [WIRING.md](docs/WIRING.md) for detailed circuit connections and MOSFET configurations.
 
 ## 🌟 Why This Project?
 
