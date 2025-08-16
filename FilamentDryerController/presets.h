@@ -3,18 +3,17 @@
 
 #include <Arduino.h>
 
-// Define a struct for a drying preset
 struct DryingPreset {
   const char* name;
-  float targetTempC;
-  unsigned long durationMin; // Duration in minutes
+  float targetTempC;     // ✅ Changed from 'int tempC' to 'float targetTempC'
+  int durationMin;
 };
 
-// Preset list (add more as needed)
+// Add missing declarations
 extern const DryingPreset presets[];
 extern const size_t NUM_PRESETS;
 
-// Helper to get preset by index
-const DryingPreset& getPreset(size_t idx);
+const DryingPreset& getPreset(size_t index);
+size_t getPresetCount();
 
 #endif

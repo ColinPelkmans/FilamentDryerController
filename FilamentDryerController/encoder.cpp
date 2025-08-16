@@ -1,68 +1,88 @@
 #include "encoder.h"
+#include "globals.h"
 #include <Arduino.h>
 
-// Encoder state tracking
-static volatile long position = 0;
-static volatile uint8_t lastState = 0;
-static volatile bool buttonPressed = false;
-
-// Debouncing
-static unsigned long lastButtonTime = 0;
-static bool lastButtonState = HIGH;
+// Simple state tracking
+static int lastA = HIGH;
+static int lastB = HIGH;
+static bool lastBtnState = HIGH;
+static unsigned long lastBtnTime = 0;
 
 void setupEncoder() {
   pinMode(ENCODER_A, INPUT_PULLUP);
   pinMode(ENCODER_B, INPUT_PULLUP);
   pinMode(ENCODER_BTN, INPUT_PULLUP);
 
-  // Initialize encoder state
-  lastState = (digitalRead(ENCODER_A) << 1) | digitalRead(ENCODER_B);
+  // Initialize
+  lastA = digitalRead(ENCODER_A);
+  lastB = digitalRead(ENCODER_B);
   encoderPos = 0;
   encoderBtnPressed = false;
   
-  Serial.println("Encoder setup complete");
-  Serial.print("Initial A: "); Serial.print(digitalRead(ENCODER_A));
-  Serial.print(", B: "); Serial.println(digitalRead(ENCODER_B));
+  Serial.println("Encoder initialized");
 }
 
 void pollEncoder() {
-  // Read current state
-  uint8_t currentState = (digitalRead(ENCODER_A) << 1) | digitalRead(ENCODER_B);
+  // Read current pin states
+  int currentA = digitalRead(ENCODER_A);
+  int currentB = digitalRead(ENCODER_B);
   
-  // Check for state change
-  if (currentState != lastState) {
-    // Determine direction using Gray code sequence
-    // Gray code: 00 -> 01 -> 11 -> 10 -> 00 (clockwise)
-    // Gray code: 00 -> 10 -> 11 -> 01 -> 00 (counter-clockwise)
-    
-    if ((lastState == 0 && currentState == 1) ||
-        (lastState == 1 && currentState == 3) ||
-        (lastState == 3 && currentState == 2) ||
-        (lastState == 2 && currentState == 0)) {
-      // Clockwise
-      encoderPos++;
-    } else if ((lastState == 0 && currentState == 2) ||
-               (lastState == 2 && currentState == 3) ||
-               (lastState == 3 && currentState == 1) ||
-               (lastState == 1 && currentState == 0)) {
-      // Counter-clockwise
-      encoderPos--;
+  // Detect transitions on EITHER pin A OR pin B
+  bool aChanged = (currentA != lastA);
+  bool bChanged = (currentB != lastB);
+  
+  if (aChanged || bChanged) {
+    // Standard quadrature encoder logic
+    if (aChanged) {
+      if (currentA == LOW && lastA == HIGH) {
+        // A falling edge
+        if (currentB == HIGH) {
+          encoderPos++;
+        } else {
+          encoderPos--;
+        }
+      } else if (currentA == HIGH && lastA == LOW) {
+        // A rising edge
+        if (currentB == LOW) {
+          encoderPos++;
+        } else {
+          encoderPos--;
+        }
+      }
     }
     
-    lastState = currentState;
+    if (bChanged) {
+      if (currentB == LOW && lastB == HIGH) {
+        // B falling edge
+        if (currentA == LOW) {
+          encoderPos++;
+        } else {
+          encoderPos--;
+        }
+      } else if (currentB == HIGH && lastB == LOW) {
+        // B rising edge
+        if (currentA == HIGH) {
+          encoderPos++;
+        } else {
+          encoderPos--;
+        }
+      }
+    }
   }
   
-  // Handle button with debouncing
-  bool currentButton = digitalRead(ENCODER_BTN);
-  unsigned long currentTime = millis();
+  // Update last states
+  lastA = currentA;
+  lastB = currentB;
   
-  if (currentButton != lastButtonState && currentTime - lastButtonTime > 50) {
-    if (currentButton == LOW && lastButtonState == HIGH) {
-      // Button pressed (falling edge)
-      encoderBtnPressed = true;
-      Serial.println("Button pressed!");
+  // Button handling
+  bool currentBtn = digitalRead(ENCODER_BTN);
+  if (currentBtn != lastBtnState) {
+    if (millis() - lastBtnTime > 50) { // Debounce
+      if (currentBtn == LOW && lastBtnState == HIGH) {
+        encoderBtnPressed = true;
+      }
+      lastBtnTime = millis();
     }
-    lastButtonState = currentButton;
-    lastButtonTime = currentTime;
+    lastBtnState = currentBtn;
   }
 }

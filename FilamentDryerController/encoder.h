@@ -4,6 +4,6 @@
 #include "globals.h"
 
 void setupEncoder();
-void pollEncoder(); // Add this!
+void pollEncoder();
 
 #endif

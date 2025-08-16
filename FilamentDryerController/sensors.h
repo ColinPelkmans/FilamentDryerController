@@ -4,7 +4,8 @@
 #include "globals.h"
 
 void setupSensors();
-float getChamberTemp();
-float getBedTemp();
+float ky028ToCelsius(int raw);
+
+// getChamberTemp() and getBedTemp() are declared in globals.h
 
 #endif

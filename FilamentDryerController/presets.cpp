@@ -8,9 +8,13 @@ const DryingPreset presets[] = {
   {"TPU",    45.0, 240}   // 4h at 45°C
 };
 
-const size_t NUM_PRESETS = sizeof(presets) / sizeof(presets[0]);
+const size_t NUM_PRESETS = sizeof(presets) / sizeof(presets[0]);  // ✅ Added export
 
 const DryingPreset& getPreset(size_t idx) {
   if (idx >= NUM_PRESETS) idx = 0;
   return presets[idx];
+}
+
+size_t getPresetCount() {  // ✅ Added missing function
+  return NUM_PRESETS;
 }

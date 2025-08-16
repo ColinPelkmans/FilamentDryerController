@@ -25,4 +25,9 @@ void startDrying(size_t presetIdx);
 void stopDrying();
 void updateDrying(float currentTemp);
 
+// ✅ Add missing functions that FilamentDryerController.ino expects
+void updateDryingController();
+void pauseDrying();
+void resumeDrying();
+
 #endif
